@@ -1,0 +1,26 @@
+[project]
+name = "index"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "quanhm-1332", email = "hoang.minh.quan@sun-asterisk.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "broker",
+    "db",
+    "logs",
+]
+
+[project.scripts]
+index = "index:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+logs = { workspace = true }
+db = { workspace = true }
+broker = { workspace = true }

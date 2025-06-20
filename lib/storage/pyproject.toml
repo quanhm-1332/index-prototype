@@ -1,0 +1,26 @@
+[project]
+name = "storage"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "quanhm-1332", email = "hoang.minh.quan@sun-asterisk.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "logs",
+    "minio>=7.2.15",
+    "pydantic>=2.11.7",
+]
+
+[project.optional-dependencies]
+logfire = [
+    "logfire>=3.21.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+logs = { workspace = true }
