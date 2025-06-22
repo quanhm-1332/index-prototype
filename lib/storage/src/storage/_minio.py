@@ -1,8 +1,6 @@
 from dataclasses import asdict
 from typing import BinaryIO
 
-import logfire
-
 import minio
 from minio.sse import SseCustomerKey, Sse
 from minio.commonconfig import Tags
@@ -10,7 +8,7 @@ from minio.retention import Retention
 
 from structlog.stdlib import BoundLogger
 
-from settings import MinioSettings
+from .settings import MinioSettings
 
 from logs import get_logger
 
@@ -61,7 +59,6 @@ class MinIOStorage(ObjectStorage):
             )
             self._client.make_bucket(bucket_name)
 
-    @logfire.instrument("MinIO get file: {bucket_name=} - {object_name=}")
     async def get_file(
         self,
         bucket_name: str,

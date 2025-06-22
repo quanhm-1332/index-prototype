@@ -1,5 +1,5 @@
 [project]
-name = "storage"
+name = "crawler"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,16 +8,21 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "arxiv>=2.2.0",
+    "broker",
+    "db",
+    "langchain-community>=0.3.25",
     "logs",
-    "minio>=7.2.15",
     "pydantic>=2.11.7",
+    "pydantic-settings>=2.9.1",
+    "pymupdf>=1.26.1",
+    "storage",
     "structlog>=25.4.0",
+    "tasks",
 ]
 
-[project.optional-dependencies]
-logfire = [
-    "logfire>=3.21.1",
-]
+[project.scripts]
+crawler = "crawler:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -25,9 +30,14 @@ build-backend = "hatchling.build"
 
 [tool.uv.sources]
 logs = { workspace = true }
+broker = { workspace = true }
+db = { workspace = true }
+storage = { workspace = true }
+tasks = { workspace = true }
 
 [dependency-groups]
 dev = [
+    "rich>=14.0.0",
     "pytest>=8.4.1",
     "pytest-asyncio>=1.0.0",
 ]

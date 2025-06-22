@@ -1,4 +1,6 @@
 from typing import Self
+from dataclasses import dataclass
+from venv import logger
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.ext.asyncio import (
@@ -8,7 +10,6 @@ from sqlalchemy.ext.asyncio import (
     AsyncEngine,
 )
 
-import logfire
 from structlog.stdlib import BoundLogger
 
 from logs import get_logger
@@ -44,8 +45,14 @@ async def start_db(
         )
 
         engine = create_async_engine(_url)
+        try:
+            import logfire
 
-        logfire.instrument_sqlalchemy(engine)
+            logfire.instrument_sqlalchemy(engine)
+        except ImportError:
+            await logger.awarning(
+                "logfire not installed, SQLAlchemy instrumentation skipped"
+            )
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
         _engine = engine
@@ -54,16 +61,16 @@ async def start_db(
     return _engine
 
 
+@dataclass
 class PostgresClient:
-    def __init__(
+    engine: AsyncEngine
+    logger: BoundLogger = get_logger("postgres.client")
+
+    def __post_init__(
         self,
-        engine: AsyncEngine,
-        logger: BoundLogger,
     ):
-        self._engine = engine
-        self._session = async_sessionmaker(self._engine, expire_on_commit=False)
-        self._logger = logger
-        self._logger.info("Postgres client initialized")
+        self._session = async_sessionmaker(self.engine, expire_on_commit=False)
+        self.logger.info("Postgres client initialized")
 
     @classmethod
     async def init(
@@ -84,5 +91,5 @@ class PostgresClient:
         return self._session
 
     async def close(self):
-        await self._engine.dispose()
-        await self._logger.ainfo("Postgres client closed")
+        await self.engine.dispose()
+        await self.logger.ainfo("Postgres client closed")

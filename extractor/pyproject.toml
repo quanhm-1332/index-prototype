@@ -1,5 +1,5 @@
 [project]
-name = "storage"
+name = "extractor"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -8,16 +8,16 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "broker",
+    "db",
     "logs",
-    "minio>=7.2.15",
-    "pydantic>=2.11.7",
-    "structlog>=25.4.0",
+    "spacy>=3.8.7",
+    "storage",
+    "tasks",
 ]
 
-[project.optional-dependencies]
-logfire = [
-    "logfire>=3.21.1",
-]
+[project.scripts]
+extractor = "extractor:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -25,9 +25,13 @@ build-backend = "hatchling.build"
 
 [tool.uv.sources]
 logs = { workspace = true }
+broker = { workspace = true }
+db = { workspace = true }
+storage = { workspace = true }
+tasks = { workspace = true }
 
 [dependency-groups]
 dev = [
-    "pytest>=8.4.1",
-    "pytest-asyncio>=1.0.0",
+    "pip>=25.1.1",
+    "rich>=14.0.0",
 ]

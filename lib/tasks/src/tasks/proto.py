@@ -1,0 +1,9 @@
+from typing import Protocol
+
+from .models import TaskCreate, Task
+
+
+class TaskController(Protocol):
+    async def create(self, task: TaskCreate): ...
+    async def update(self, task: TaskCreate): ...
+    async def get(self, task_id: str) -> Task | None: ...
