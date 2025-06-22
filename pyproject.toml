@@ -7,4 +7,18 @@ requires-python = ">=3.12"
 dependencies = []
 
 [tool.uv.workspace]
-members = ["lib/db", "lib/graphdb", "lib/tasks", "lib/logs", "lib/storage", "lib/auth", "lib/broker", "extractor", "parser", "chunker", "crawler", "builder", "api"]
+members = [
+    "lib/db",
+    "lib/graphdb",
+    "lib/tasks",
+    "lib/logs",
+    "lib/storage",
+    "lib/auth",
+    "lib/broker",
+    "services/index/gateway",
+    "services/index/crawler",
+    "services/index/builder",
+    "services/index/chunker",
+    "services/index/extractor",
+    "services/index/parser",
+]

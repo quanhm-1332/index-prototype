@@ -62,10 +62,10 @@ class RabbitMQPool:
             exchange = await channel.declare_exchange(
                 exchange_name,
                 type=ExchangeType.TOPIC,
-                passive=True,
+                # passive=True,
                 durable=True,
             )
-            queue = await channel.declare_queue(queue_name, passive=True, durable=True)
+            queue = await channel.declare_queue(queue_name, durable=True)
             await queue.bind(exchange, routing_key)
             await self.logger.ainfo(
                 "Queue bound to exchange",

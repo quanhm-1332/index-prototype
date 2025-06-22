@@ -1,7 +1,7 @@
 from pydantic import BaseModel, SecretStr
 
 
-class PostgresSettings(BaseModel):
+class PostgreSQLSettings(BaseModel):
     host: str
     port: int
     username: str

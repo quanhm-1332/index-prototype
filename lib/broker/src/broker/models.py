@@ -7,4 +7,4 @@ class TaskMessage(BaseModel):
     from_queue: str
     to_queue: str
     resource_url: str | None
-    metdata: dict[str, Any]
+    metadata: dict[str, Any]

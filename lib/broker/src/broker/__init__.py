@@ -1,7 +1,7 @@
 from .rabbitmq._conn import RabbitMQPool
 from .rabbitmq.settings import RabbitMQSettings
 from .rabbitmq.publisher import RabbitMQPublisher
-from .rabbitmq.subscriber import RabbitMQSubscriber
+from .rabbitmq.subscriber import RabbitMQSubscriber, run
 from .models import TaskMessage
 
 __all__ = [
@@ -10,4 +10,5 @@ __all__ = [
     "RabbitMQPublisher",
     "RabbitMQSubscriber",
     "TaskMessage",
+    "run",
 ]

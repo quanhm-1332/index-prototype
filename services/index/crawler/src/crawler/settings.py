@@ -7,6 +7,8 @@ from pydantic_settings import (
 from pydantic import BaseModel
 
 from broker import RabbitMQSettings
+from db import PostgreSQLSettings
+from storage import MinioSettings
 
 
 class RabbitMQConnectorSettings(BaseModel):
@@ -17,6 +19,8 @@ class RabbitMQConnectorSettings(BaseModel):
 
 class CrawlerSettings(BaseSettings):
     rabbitmq: RabbitMQSettings
+    postgre: PostgreSQLSettings
+    minio: MinioSettings
 
     publisher_connector: RabbitMQConnectorSettings
     subscriber_connector: RabbitMQConnectorSettings
@@ -30,12 +34,17 @@ class CrawlerSettings(BaseSettings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
+        import sys
+
         return (
             init_settings,
             env_settings,
             dotenv_settings,
             file_secret_settings,
-            YamlConfigSettingsSource(settings_cls),
+            YamlConfigSettingsSource(
+                settings_cls,
+                yaml_file="/home/hoang.minh.quan/sandbox/monorepo/crawler/src/config.yaml",
+            ),
         )
 
 

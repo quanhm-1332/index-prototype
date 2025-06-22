@@ -1,7 +1,7 @@
 from .engines.pg import PostgresClient
-from .settings import PostgresSettings
+from .settings import PostgreSQLSettings
 
 __all__ = [
     "PostgresClient",
-    "PostgresSettings",
+    "PostgreSQLSettings",
 ]

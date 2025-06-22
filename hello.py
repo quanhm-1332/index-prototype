@@ -1,5 +1,7 @@
 def main():
-    print("Hello from avatarin-rag!")
+    q, r = "heelo".split("?")
+    print(q)
+    print(r)
 
 
 if __name__ == "__main__":

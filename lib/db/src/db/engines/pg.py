@@ -14,7 +14,7 @@ from structlog.stdlib import BoundLogger
 
 from logs import get_logger
 
-from ..settings import PostgresSettings
+from ..settings import PostgreSQLSettings
 
 
 _engine = None
@@ -46,7 +46,7 @@ async def start_db(
 
         engine = create_async_engine(_url)
         try:
-            import logfire
+            import logfire  # type: ignore[import]
 
             logfire.instrument_sqlalchemy(engine)
         except ImportError:
@@ -75,7 +75,7 @@ class PostgresClient:
     @classmethod
     async def init(
         cls,
-        settings: PostgresSettings,
+        settings: PostgreSQLSettings,
         logger: BoundLogger = get_logger("postgres.client"),
     ) -> Self:
         engine = await start_db(

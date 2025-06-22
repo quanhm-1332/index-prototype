@@ -1,17 +1,10 @@
 import datetime
-from enum import Enum
 
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from db.engines.pg import Base
-
-
-class TaskStatus(int, Enum):
-    PENDING = 0
-    IN_PROGRESS = 1
-    COMPLETED = 2
-    FAILED = 3
+from ..models import TaskStatus
 
 
 class Task(Base):

@@ -58,7 +58,7 @@ def setup_logging(
         structlog.stdlib.ProcessorFormatter.remove_processors_meta
     ]
     try:
-        import logfire
+        import logfire  # type: ignore[import]
 
         formater_processors.append(logfire.StructlogProcessor(console_log=True))
     except ImportError:
