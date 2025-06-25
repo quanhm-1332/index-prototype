@@ -1,20 +1,44 @@
 from typing import Annotated, Literal
-from pydantic import BaseModel, Discriminator
-from enum import Enum
+from pydantic import BaseModel, Field
+
+from db import PostgresClient
+from broker import RabbitMQPool
+
+from ..base import ArbitraryBaseModel as BaseModel
 
 
-class ArxivMetadata:
-    kind: Literal["arxiv"] = "arxiv"
+class Resources(BaseModel):
+    db: PostgresClient
+    broker: RabbitMQPool
+
+
+class ArxivMetadata(BaseModel):
+    kind: Literal["arxiv"]
     max_results: int | None = None
 
 
-class WikipediaMetadata:
-    kind: Literal["wikipedia"] = "wikipedia"
+class WikipediaMetadata(BaseModel):
+    kind: Literal["wikipedia"]
+    max_results: int | None = None
 
 
-RequestMetadata = Annotated[ArxivMetadata | WikipediaMetadata, Discriminator("kind")]
+RequestMetadata = Annotated[
+    ArxivMetadata | WikipediaMetadata, Field(discriminator="kind")
+]
 
 
 class IndexRequest(BaseModel):
     query: str
     metadata: RequestMetadata
+
+
+class Progress(BaseModel):
+    order: int
+    status: str
+
+
+class TaskStatusResponse(BaseModel):
+    task_id: str
+    status: str
+    phase: str
+    progress: dict[str, Progress] | None = None

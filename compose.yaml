@@ -1,0 +1,87 @@
+name: avatarin-index-prototype
+
+networks:
+  internal:
+    driver: bridge
+
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.gateway
+    networks:
+      - internal
+    ports:
+      - "19000:19000"
+  builder:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.builder
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-1:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-2:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-3:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-4:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-5:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-6:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-7:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway
+  worker-8:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    networks:
+      - internal
+    depends_on:
+      - gateway

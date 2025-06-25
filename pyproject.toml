@@ -16,9 +16,9 @@ members = [
     "lib/auth",
     "lib/broker",
     "services/index/gateway",
-    "services/index/crawler",
     "services/index/builder",
-    "services/index/chunker",
-    "services/index/extractor",
-    "services/index/parser",
+    "services/index/workers",
 ]
+
+[tool.uv.sources]
+builder = { workspace = true }

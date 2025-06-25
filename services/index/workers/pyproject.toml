@@ -1,25 +1,27 @@
 [project]
-name = "gateway"
+name = "worker"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "quanhm-1332", email = "hoang.minh.quan@sun-asterisk.com" }]
 requires-python = ">=3.12"
 dependencies = [
+    "arxiv>=2.2.0",
     "broker",
     "db",
-    "fastapi>=0.115.13",
+    "langchain-community>=0.3.25",
     "logs",
     "pydantic>=2.11.7",
-    "pydantic-settings[yaml]>=2.10.0",
+    "pydantic-settings>=2.9.1",
+    "pymupdf>=1.26.1",
+    "spacy>=3.8.7",
     "storage",
     "structlog>=25.4.0",
     "tasks",
-    "uvicorn>=0.34.3",
 ]
 
 [project.scripts]
-gateway = "gateway:main"
+worker = "worker:main"
 
 [build-system]
 requires = ["hatchling"]
@@ -31,3 +33,11 @@ broker = { workspace = true }
 db = { workspace = true }
 storage = { workspace = true }
 tasks = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "rich>=14.0.0",
+ "pytest>=8.4.1",
+ "pytest-asyncio>=1.0.0",
+ "pip>=25.1.1",
+]

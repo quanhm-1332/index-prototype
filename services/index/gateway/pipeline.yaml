@@ -1,0 +1,38 @@
+exchange_name: backlog
+backlog_queue_name: backlog
+builder_queue_name: builder_queue
+pipeline:
+  crawler:
+    handler: handler.crawler
+    task_name: crawler
+    next_task_name: parser
+    first: true
+    routing_key: backlog.first
+    bucket_name: crawler
+    object_name: 'arxiv.json'
+  parser:
+    handler: handler.parser
+    task_name: parser
+    next_task_name: chunker
+    routing_key: backlog.first
+    bucket_name: parser
+    object_name: 'arxiv.json'
+    args:
+      separator: '<s>'
+  chunker:
+    handler: handler.chunker
+    task_name: chunker
+    next_task_name: extractor
+    routing_key: backlog.first
+    bucket_name: chunker
+    object_name: 'arxiv.json'
+    args:
+      separator: '<s>'
+  extractor:
+    handler: handler.extractor
+    task_name: extractor
+    next_task_name: builder
+    last: true
+    routing_key: backlog.second
+    bucket_name: extractor
+    object_name: 'arxiv.json'
