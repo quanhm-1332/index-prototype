@@ -1,5 +1,5 @@
 [project]
-name = "avatarin-rag"
+name = "index-rag-prototype"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -17,8 +17,9 @@ members = [
     "lib/broker",
     "services/index/gateway",
     "services/index/builder",
-    "services/index/workers",
+    "services/index/workers", "lib/fe", "services/query",
 ]
 
 [tool.uv.sources]
 builder = { workspace = true }
+

@@ -1,4 +1,5 @@
 version = 1
+revision = 1
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.13'",
@@ -13,8 +14,10 @@ members = [
     "broker",
     "builder",
     "db",
+    "fe",
     "gateway",
     "logs",
+    "query",
     "storage",
     "tasks",
     "worker",
@@ -504,6 +507,7 @@ requires-dist = [
     { name = "sqlalchemy", specifier = ">=2.0.41" },
     { name = "structlog", specifier = ">=25.4.0" },
 ]
+provides-extras = ["logfire"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -545,6 +549,11 @@ sdist = { url = "https://files.pythonhosted.org/packages/20/64/ec0788201b5554e2a
 wheels = [
     { url = "https://files.pythonhosted.org/packages/59/4a/e17764385382062b0edbb35a26b7cf76d71e27e456546277a42ba6545c6e/fastapi-0.115.13-py3-none-any.whl", hash = "sha256:0a0cab59afa7bab22f5eb347f8c9864b681558c278395e94035a741fc10cd865", size = 95315 },
 ]
+
+[[package]]
+name = "fe"
+version = "0.1.0"
+source = { editable = "lib/fe" }
 
 [[package]]
 name = "feedparser"
@@ -963,6 +972,7 @@ requires-dist = [
     { name = "logfire", marker = "extra == 'logfire'", specifier = ">=3.21.1" },
     { name = "structlog", specifier = ">=25.4.0" },
 ]
+provides-extras = ["logfire"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1792,6 +1802,11 @@ wheels = [
 ]
 
 [[package]]
+name = "query"
+version = "0.1.0"
+source = { editable = "services/query" }
+
+[[package]]
 name = "requests"
 version = "2.32.4"
 source = { registry = "https://pypi.org/simple" }
@@ -2033,6 +2048,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "structlog", specifier = ">=25.4.0" },
 ]
+provides-extras = ["logfire"]
 
 [package.metadata.requires-dev]
 dev = [

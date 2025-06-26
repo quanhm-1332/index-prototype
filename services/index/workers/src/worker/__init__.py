@@ -24,17 +24,33 @@ async def run() -> None:
 
     storage = MinIOStorage(settings=settings.minio)
 
-    response = requests.get(f"{settings.master.url}/pipeline/config")
-    if response.status_code != 200:
-        logger.error(
-            "Failed to fetch pipeline configuration",
-            status_code=response.status_code,
+    pipeline_config = None
+    for i in range(3):
+        try:
+            response = requests.get(f"{settings.master.url}/pipeline/config")
+            if response.status_code != 200:
+                await logger.aerror(
+                    "Failed to fetch pipeline configuration",
+                    retry=i + 1,
+                    status_code=response.status_code,
+                    url=settings.master.url,
+                )
+                continue
+            if response.status_code == 200:
+                pipeline_config = Pipeline.model_validate_json(response.content)
+        except Exception:
+            await logger.aexception(
+                "Error occurred while fetching pipeline configuration",
+                url=settings.master.url,
+                retry=i + 1,
+            )
+            continue
+    if not pipeline_config:
+        await logger.aerror(
+            "Failed to fetch pipeline configuration after retries",
             url=settings.master.url,
         )
-        return
-
-    pipeline_config = Pipeline.model_validate_json(response.content)
-
+        raise RuntimeError("Failed to fetch pipeline configuration from master service")
     handler_register = HandlerRegistry()
 
     subscriber = RabbitMQSubscriber(
@@ -80,7 +96,7 @@ async def run() -> None:
                 task_name=task_name,
                 **task_info.model_dump(),
             )
-            return
+            raise
     processor = Processor(
         storage=storage,
         task_controller=controller,

@@ -39,6 +39,7 @@ def setup_logging(
         drop_color_message_key,
         timestamper,
         structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
     ]
 
     structlog.configure(

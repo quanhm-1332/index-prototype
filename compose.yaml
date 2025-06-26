@@ -1,10 +1,75 @@
 name: avatarin-index-prototype
 
+volumes:
+  pg_data:
+  minio_data:
+  neo4j_data:
+
 networks:
   internal:
     driver: bridge
 
 services:
+  rabbitmq:
+    image: rabbitmq:management
+    restart: always
+    # ports:
+    #   - "15672:15672"
+    healthcheck:
+      test: rabbitmq-diagnostics check_running
+      interval: 5s
+      timeout: 30s
+      retries: 10
+    # env_file:
+    #   - path: ./.env
+    #     required: true # default
+    networks:
+      - internal
+
+  postgre:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES__USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES__PASSWORD}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    # env_file:
+    #   - path: ./.env
+    #     required: true # default
+    networks:
+      - internal
+
+  neo4j:
+    user: ${USER_ID}:${GROUP_ID}
+    image: neo4j:5.26.6-bullseye
+    ports:
+      - "27687:7687"
+    volumes:
+      - neo4j_data:/data
+      - ./neo4j/plugins:/plugins
+      - ./neo4j/conf:/conf
+    environment:
+      - NEO4J_AUTH=${NEO4J__USERNAME}/${NEO4J__PASSWORD}
+      # - NEO4J_PLUGINS=["graph-data-science", "apoc"]
+    networks:
+      - internal
+  
+  minio:
+    image: quay.io/minio/minio
+    environment:
+      - MINIO_ROOT_USER=${MINIO__ACCESS_KEY}
+      - MINIO_ROOT_PASSWORD=${MINIO__SECRET_KEY}
+    ports:
+      - "29000:9000"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    # env_file:
+    #   - path: ./.env
+    #     required: true # default
+    networks:
+      - internal
+
   gateway:
     build:
       context: .
@@ -13,6 +78,13 @@ services:
       - internal
     ports:
       - "19000:19000"
+    depends_on:
+      - rabbitmq
+      - postgre
+      - neo4j
+      - minio
+    restart: on-failure
+
   builder:
     build:
       context: .
@@ -21,6 +93,8 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
+
   worker-1:
     build:
       context: .
@@ -29,6 +103,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-2:
     build:
       context: .
@@ -37,6 +112,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-3:
     build:
       context: .
@@ -45,6 +121,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-4:
     build:
       context: .
@@ -53,6 +130,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-5:
     build:
       context: .
@@ -61,6 +139,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-6:
     build:
       context: .
@@ -69,6 +148,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-7:
     build:
       context: .
@@ -77,6 +157,7 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
   worker-8:
     build:
       context: .
@@ -85,3 +166,4 @@ services:
       - internal
     depends_on:
       - gateway
+    restart: on-failure
